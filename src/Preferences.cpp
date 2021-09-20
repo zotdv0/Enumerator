@@ -10,42 +10,10 @@
 #define NUMBER_FORMAT_SIZE (256)
 
 
-Preferences::Preferences(const NppData& nppData)
+Preferences::Preferences()
 {
 	this->number_format = new char[NUMBER_FORMAT_SIZE];
 	set_defaults();
-	//TCHAR buf[MAX_PATH] = {};
-	::SendMessage(nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)this->INI_PATH);
-	// FIXME: Settings folder!!!
-	//mbstowcs(this->INI_PATH, buf, MAX_PATH);
-	//StringCbCopy(this->INI_PATH, MAX_PATH, buf);
-	//if (!PathFileExists(this->INI_PATH))
-	//{
-		//CreateDirectory(this->INI_PATH, NULL);
-	//}
-	//PathAppend(this->INI_PATH, Preferences::INI_FILENAME);
-	//StringCbCat(this->INI_PATH, MAX_PATH, Preferences::INI_FILENAME);
-
-	StringCbCopy(this->INI_PATH, MAX_PATH, TEXT("D:"));
-
-	PathAppend(this->INI_PATH, Preferences::INI_FILENAME);
-	if (PathFileExists(this->INI_PATH))
-	{
-		this->read();
-	}
-	else
-	{
-		this->write();
-	}
-
-#if 0
-	if (!PathFileExists(this->INI_PATH))
-	{
-//		::MessageBox(NULL, this->INI_PATH, TEXT("PATH"), MB_OK);
-		WritePrivateProfileString(NULL, NULL, NULL, this->INI_PATH);
-		this->write();
-	}
-#endif
 }
 
 Preferences::~Preferences()
@@ -59,6 +27,24 @@ void Preferences::set_defaults()
 	this->increment = DEFAULT_INCREMENT;
 	this->insert_mode = DEFAULT_INSERT_MODE;
 	wcstombs(this->number_format, DEFAULT_NUMBER_FORMAT, NUMBER_FORMAT_SIZE);
+}
+
+void Preferences::init(const NppData& nppData)
+{
+	::SendMessage(nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)this->INI_PATH);
+	if (!PathFileExists(this->INI_PATH))
+	{
+		CreateDirectory(this->INI_PATH, NULL);
+	}
+	PathAppend(this->INI_PATH, Preferences::INI_FILENAME);
+	if (PathFileExists(this->INI_PATH))
+	{
+		this->read();
+	}
+	else
+	{
+		this->write();
+	}
 }
 
 #define READ_PREF_INT(name) GetPrivateProfileInt(Preferences::INI_SECTION, (Preferences::PREF_##name), (DEFAULT_##name), this->INI_PATH)
@@ -87,5 +73,4 @@ void Preferences::write()
 	WRITE_PREF_INT(this->insert_mode, INSERT_MODE);
 	WRITE_PREF_STR(this->number_format, NUMBER_FORMAT);
 	
-	WritePrivateProfileString(Preferences::INI_SECTION, TEXT("ThisFile"), this->INI_PATH, this->INI_PATH);
 }

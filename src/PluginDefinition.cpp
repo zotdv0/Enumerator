@@ -19,7 +19,9 @@
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
 #include <strsafe.h>
+#include <cstdlib>
 #include "Preferences.h"
+
 
 //
 // The plugin data that Notepad++ needs
@@ -30,15 +32,15 @@ FuncItem funcItem[nbFunc];
 // The data of Notepad++ that you can use in your plugin commands
 //
 NppData nppData;
-Preferences prefs(nppData);
-
+Preferences prefs;
+HINSTANCE gModule;
 
 //
 // Initialize your plugin data here
 // It will be called while plugin loading   
-void pluginInit(HANDLE /*hModule*/)
+void pluginInit(HANDLE hModule)
 {
-    //prefs.read();
+    gModule = (HINSTANCE)hModule;
 }
 
 //
@@ -53,6 +55,7 @@ void pluginCleanUp()
 // You should fill your plugins commands here
 void commandMenuInit()
 {
+    prefs.init(nppData);
 
     //--------------------------------------------//
     //-- STEP 3. CUSTOMIZE YOUR PLUGIN COMMANDS --//
@@ -66,8 +69,9 @@ void commandMenuInit()
     //            );
     setCommand(0, TEXT("Ascending by index"), enumerateSelectionsByIndexAsc);
     setCommand(1, TEXT("Ascending by position"), enumerateSelectionsByPositionAsc);
-    setCommand(3, TEXT("Descending by index"), enumerateSelectionsByIndexDesc);
-    setCommand(4, TEXT("Descending by position"), enumerateSelectionsByPositionDesc);
+    setCommand(2, TEXT("Descending by index"), enumerateSelectionsByIndexDesc);
+    setCommand(3, TEXT("Descending by position"), enumerateSelectionsByPositionDesc);
+
 }
 
 //

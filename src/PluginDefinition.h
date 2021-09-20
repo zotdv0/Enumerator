@@ -29,7 +29,8 @@
 //-------------------------------------//
 // Here define your plugin name
 //
-const TCHAR NPP_PLUGIN_NAME[] = TEXT("Enumerator");
+#define NPP_PLUGIN_NAME_DEF TEXT("Enumerator")
+const TCHAR NPP_PLUGIN_NAME[] = NPP_PLUGIN_NAME_DEF;
 
 //-----------------------------------------------//
 //-- STEP 2. DEFINE YOUR PLUGIN COMMAND NUMBER --//
@@ -75,6 +76,5 @@ void enumerateSelectionsByIndexAsc();
 void enumerateSelectionsByIndexDesc();
 void enumerateSelectionsByPositionAsc();
 void enumerateSelectionsByPositionDesc();
-
 
 #endif //PLUGINDEFINITION_H
