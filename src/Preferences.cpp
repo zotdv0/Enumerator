@@ -71,19 +71,15 @@ void Preferences::read()
 	TCHAR buf[NUMBER_FORMAT_SIZE];
 	READ_PREF_STR(buf, NUMBER_FORMAT);
 	wcstombs(this->number_format, buf, NUMBER_FORMAT_SIZE);
-	//this->start_number = GetPrivateProfileInt(Preferences::INI_SECTION, Preferences::PREF_START_NUMBER, DEFAULT_START_NUMBER, this->INI_PATH);
-	//this->increment = GetPrivateProfileInt(Preferences::INI_SECTION, Preferences::PREF_INCREMENT, DEFAULT_INCREMENT, this->INI_PATH);
-	//GetPrivateProfileString(Preferences::INI_SECTION, Preferences::PREF_NUMBER_FORMAT, DEFAULT_NUMBER_FORMAT, this->number_format, NUMBER_FORMAT_SIZE, this->INI_PATH);
-
 }
 
 #define FORMAT_BUF(var, format) StringCbPrintf(buf, buf_size, TEXT(format), (var))
 #define WRITE_BUF(name) WritePrivateProfileString(Preferences::INI_SECTION, (Preferences::PREF_##name), buf, this->INI_PATH)
 #define WRITE_PREF_INT(var, name) FORMAT_BUF((SSIZE_T)(var), "%lld"); WRITE_BUF(name)
-#define WRITE_PREF_STR(var, name) FORMAT_BUF(var, "\"%ls\""); WRITE_BUF(name)
+#define WRITE_PREF_STR(var, name) FORMAT_BUF(var, "\"%hs\""); WRITE_BUF(name)
 void Preferences::write()
 {
-	const size_t buf_size = 256;
+	const size_t buf_size = NUMBER_FORMAT_SIZE + 2*sizeof(TCHAR);
 	TCHAR buf[buf_size];
 	
 	WRITE_PREF_INT(this->start_number, START_NUMBER);
@@ -91,14 +87,5 @@ void Preferences::write()
 	WRITE_PREF_INT(this->insert_mode, INSERT_MODE);
 	WRITE_PREF_STR(this->number_format, NUMBER_FORMAT);
 	
-	//StringCbPrintf(buf, buf_size, TEXT("%lld"), this->start_number);
-	//WritePrivateProfileString(Preferences::INI_SECTION, Preferences::PREF_START_NUMBER, buf, this->INI_PATH);
-
-	//StringCbPrintf(buf, buf_size, TEXT("%lld"), this->increment);
-	//WritePrivateProfileString(Preferences::INI_SECTION, Preferences::PREF_INCREMENT, buf, this->INI_PATH);
-
-	//StringCbPrintf(buf, buf_size, TEXT("\"%s\""), this->number_format);
-	//WritePrivateProfileString(Preferences::INI_SECTION, Preferences::PREF_NUMBER_FORMAT, buf, this->INI_PATH);
-
 	WritePrivateProfileString(Preferences::INI_SECTION, TEXT("ThisFile"), this->INI_PATH, this->INI_PATH);
 }
