@@ -10,6 +10,7 @@ public:
 	SSIZE_T increment;
 	LPSTR number_format;
 	InsertMode insert_mode;
+	BOOL skip_empty;
 
 	Preferences();
 	~Preferences();
@@ -28,4 +29,5 @@ protected:
 	LPCTSTR PREF_INCREMENT = TEXT("Increment");
 	LPCTSTR PREF_NUMBER_FORMAT = TEXT("NumberFormat");
 	LPCTSTR PREF_INSERT_MODE = TEXT("InsertMode");
+	LPCTSTR PREF_SKIP_EMPTY = TEXT("SkipEmpty");
 };

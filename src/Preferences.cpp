@@ -8,6 +8,7 @@
 #define DEFAULT_INSERT_MODE (InsertMode::AtSelectionStart)
 #define DEFAULT_NUMBER_FORMAT TEXT("%d. ")
 #define NUMBER_FORMAT_SIZE (256)
+#define DEFAULT_SKIP_EMPTY (FALSE)
 
 
 Preferences::Preferences()
@@ -27,6 +28,7 @@ void Preferences::set_defaults()
 	this->increment = DEFAULT_INCREMENT;
 	this->insert_mode = DEFAULT_INSERT_MODE;
 	wcstombs(this->number_format, DEFAULT_NUMBER_FORMAT, NUMBER_FORMAT_SIZE);
+	this->skip_empty = DEFAULT_SKIP_EMPTY;
 }
 
 void Preferences::init(const NppData& nppData)
@@ -54,6 +56,7 @@ void Preferences::read()
 	this->start_number = READ_PREF_INT(START_NUMBER);
 	this->increment = READ_PREF_INT(INCREMENT);
 	this->insert_mode = (InsertMode)READ_PREF_INT(INSERT_MODE);
+	this->skip_empty = READ_PREF_INT(SKIP_EMPTY);
 	TCHAR buf[NUMBER_FORMAT_SIZE];
 	READ_PREF_STR(buf, NUMBER_FORMAT);
 	wcstombs(this->number_format, buf, NUMBER_FORMAT_SIZE);
@@ -71,6 +74,7 @@ void Preferences::write()
 	WRITE_PREF_INT(this->start_number, START_NUMBER);
 	WRITE_PREF_INT(this->increment, INCREMENT);
 	WRITE_PREF_INT(this->insert_mode, INSERT_MODE);
+	WRITE_PREF_INT(this->skip_empty, SKIP_EMPTY);
 	WRITE_PREF_STR(this->number_format, NUMBER_FORMAT);
 	
 }

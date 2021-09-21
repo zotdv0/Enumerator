@@ -22,7 +22,6 @@
 #include <cstdlib>
 #include "Preferences.h"
 
-
 //
 // The plugin data that Notepad++ needs
 //
@@ -79,14 +78,14 @@ void commandMenuInit()
 //
 void commandMenuCleanUp()
 {
-	// Don't forget to deallocate your shortcut here
+    // Don't forget to deallocate your shortcut here
 }
 
 
 //
 // This function help you to initialize your plugin commands
 //
-bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool check0nInit) 
+bool setCommand(size_t index, TCHAR* cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey* sk, bool check0nInit)
 {
     if (index >= nbFunc)
         return false;
@@ -134,7 +133,7 @@ int comparePositions(LPCVOID a, LPCVOID b)
 }
 
 // Generic enumeration function
-void enumerateGeneric(bool byPosition = false, bool desc = false, bool skipEmpty = false)
+void enumerateGeneric(bool byPosition = false, bool desc = false)
 {
     const HWND curScintilla = getScintilla();
 
@@ -167,7 +166,7 @@ void enumerateGeneric(bool byPosition = false, bool desc = false, bool skipEmpty
         Selection& curSelection = selections[desc ? selectionsCount - 1 - index : index];
 
         // Skip empty selection
-        if (skipEmpty && curSelection.isEmpty)
+        if (prefs.skip_empty && curSelection.isEmpty)
         {
             continue;
         }
@@ -210,3 +209,4 @@ void enumerateSelectionsByIndexAsc() { enumerateGeneric(false, false); }
 void enumerateSelectionsByIndexDesc() { enumerateGeneric(false, true); }
 void enumerateSelectionsByPositionAsc() { enumerateGeneric(true, false); }
 void enumerateSelectionsByPositionDesc() { enumerateGeneric(true, true); }
+
